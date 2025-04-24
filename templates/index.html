@@ -3,26 +3,49 @@
 <head>
     <title>Vehicle Maintenance Prediction</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 50px; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+            background-color: #f9f9f9;
+        }
         .form-container {
-            max-width: 500px; margin: auto; padding: 20px;
-            border: 1px solid #ccc; border-radius: 10px;
+            max-width: 500px;
+            margin: auto;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 10px;
         }
         .form-container input, .form-container select {
-            width: 100%; padding: 10px; margin: 5px 0 20px 0;
-            border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 20px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
         }
         .form-container input[type="submit"] {
-            background-color: #4CAF50; color: white; border: none;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
         }
         .form-container input[type="submit"]:hover {
             background-color: #45a049;
         }
-        .result { font-size: 1.5em; color: #4CAF50; text-align: center; margin-top: 20px; }
-        .user-info { text-align: center; margin-bottom: 10px; }
+        .result {
+            font-size: 1.5em;
+            color: #4CAF50;
+            text-align: center;
+            margin-top: 20px;
+        }
         .logout-btn {
-            background-color: #f44336; color: white;
-            border: none; padding: 5px 10px; border-radius: 5px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            float: right;
         }
     </style>
 </head>
@@ -30,14 +53,12 @@
     <div class="form-container">
         <h2>Vehicle Maintenance Prediction</h2>
 
-        {% if session.get('username') %}
-            <div class="user-info">
-                Logged in as: <strong>{{ session['username'] }}</strong><br>
-                <form action="{{ url_for('logout') }}" method="get">
-                    <input type="submit" value="Logout" class="logout-btn">
-                </form>
-            </div>
-        {% endif %}
+        <div style="text-align: right; margin-bottom: 10px;">
+            Logged in as: <strong>{{ session['username'] }}</strong>
+            <form action="/logout" method="get" style="display: inline;">
+                <input type="submit" value="Logout" class="logout-btn">
+            </form>
+        </div>
 
         <form action="/predict" method="post">
             <label for="Vehicle_Age">Vehicle Age (years):</label>
@@ -88,3 +109,4 @@
     </div>
 </body>
 </html>
+
