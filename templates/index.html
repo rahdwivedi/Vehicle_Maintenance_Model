@@ -1,73 +1,49 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html>
 <head>
     <title>Vehicle Maintenance Prediction</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 50px;
-        }
+        body { font-family: Arial, sans-serif; margin: 50px; }
         .form-container {
-            max-width: 500px;
-            margin: auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
+            max-width: 500px; margin: auto; padding: 20px;
+            border: 1px solid #ccc; border-radius: 10px;
         }
         .form-container input, .form-container select {
-            width: 100%;
-            padding: 10px;
-            margin: 5px 0 20px 0;
-            display: inline-block;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
+            width: 100%; padding: 10px; margin: 5px 0 20px 0;
+            border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;
         }
         .form-container input[type="submit"] {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
+            background-color: #4CAF50; color: white; border: none;
         }
         .form-container input[type="submit"]:hover {
             background-color: #45a049;
         }
-        .result {
-            font-size: 1.5em;
-            color: #4CAF50;
-            text-align: center;
-            margin-top: 20px;
-        }
-        .logout-container {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .logout-container a {
-            text-decoration: none;
-            color: white;
-            background-color: #f44336;
-            padding: 8px 16px;
-            border-radius: 5px;
-        }
-        .logout-container a:hover {
-            background-color: #da190b;
-        }
-        .welcome {
-            text-align: center;
-            font-size: 1em;
-            color: #555;
-            margin-bottom: 20px;
-        }
+        .result { font-size: 1.5em; color: #4CAF50; text-align: center; margin-top: 20px; }
+        .login-form { margin-top: 40px; text-align: center; }
+        .user-info { text-align: center; margin-bottom: 10px; }
+        .logout-btn { background-color: #f44336; color: white; border: none; padding: 5px 10px; border-radius: 5px; }
     </style>
 </head>
 <body>
     <div class="form-container">
         <h2>Vehicle Maintenance Prediction</h2>
 
-        <div class="welcome">
-            {% if session['username'] %}
-                Welcome, {{ session['username'] }}!
-            {% endif %}
-        </div>
+        {% if session.get('username') %}
+            <div class="user-info">
+                Logged in as: <strong>{{ session['username'] }}</strong><br>
+                <form action="{{ url_for('logout') }}" method="get">
+                    <input type="submit" value="Logout" class="logout-btn">
+                </form>
+            </div>
+        {% else %}
+            <div class="login-form">
+                <form action="{{ url_for('login') }}" method="post">
+                    <input type="text" name="username" placeholder="Username" required>
+                    <input type="password" name="password" placeholder="Password" required>
+                    <input type="submit" value="Login">
+                </form>
+            </div>
+        {% endif %}
 
         <form action="/predict" method="post">
             <label for="Vehicle_Age">Vehicle Age (years):</label>
@@ -115,12 +91,9 @@
         {% if prediction_text %}
         <div class="result">{{ prediction_text }}</div>
         {% endif %}
-
-        <div class="logout-container">
-            <a href="{{ url_for('logout') }}">Logout</a>
-        </div>
     </div>
 </body>
 </html>
+
 
 
