@@ -3,7 +3,7 @@ import pickle
 import numpy as np
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key_here'
+app.secret_key = 'your_secret_key_here'  # Set your secret key for session handling
 
 # Load the trained model
 model_path = 'vehicle_model.pkl'
@@ -15,38 +15,37 @@ battery_status_encoding = {'New': 0, 'Good': 1, 'Weak': 2}
 tire_condition_encoding = {'New': 0, 'Good': 1, 'Worn Out': 2}
 brake_condition_encoding = {'New': 0, 'Good': 1, 'Worn Out': 2}
 
-# Login page
+# Dummy user credentials
+users = {
+    'admin': 'admin@123'
+}
+
 @app.route('/')
-def login():
-    return render_template('login.html')
-
-@app.route('/login', methods=['POST'])
-def do_login():
-    username = request.form['username']
-    password = request.form['password']
-    if username == "admin" and password == "admin@123":
-        session['username'] = username
+def index():
+    if 'username' in session:
         return redirect(url_for('home'))
-    else:
-        return render_template('login.html', error="User ID or Password is incorrect.")
-
-@app.route('/logout')
-def logout():
-    session.pop('username', None)
     return redirect(url_for('login'))
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        if username in users and users[username] == password:
+            session['username'] = username
+            return redirect(url_for('home'))
+        else:
+            return render_template('login.html', error="Invalid credentials. Please try again.")
+    return render_template('login.html')
 
 @app.route('/home')
 def home():
-    if 'username' in session:
-        return render_template('index.html')
-    else:
+    if 'username' not in session:
         return redirect(url_for('login'))
+    return render_template('index.html')
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    if 'username' not in session:
-        return redirect(url_for('login'))
-
     try:
         Vehicle_Age = float(request.form['Vehicle_Age'])
         Odometer_Reading = float(request.form['Odometer_Reading'])
@@ -68,8 +67,14 @@ def predict():
     except Exception as e:
         return render_template('index.html', prediction_text=f'Error: {str(e)}')
 
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    return redirect(url_for('login'))
+
 if __name__ == "__main__":
     app.run(debug=True)
+
 
 
 
