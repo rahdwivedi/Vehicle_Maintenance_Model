@@ -19,9 +19,11 @@
             background-color: #45a049;
         }
         .result { font-size: 1.5em; color: #4CAF50; text-align: center; margin-top: 20px; }
-        .login-form { margin-top: 40px; text-align: center; }
         .user-info { text-align: center; margin-bottom: 10px; }
-        .logout-btn { background-color: #f44336; color: white; border: none; padding: 5px 10px; border-radius: 5px; }
+        .logout-btn {
+            background-color: #f44336; color: white;
+            border: none; padding: 5px 10px; border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -33,14 +35,6 @@
                 Logged in as: <strong>{{ session['username'] }}</strong><br>
                 <form action="{{ url_for('logout') }}" method="get">
                     <input type="submit" value="Logout" class="logout-btn">
-                </form>
-            </div>
-        {% else %}
-            <div class="login-form">
-                <form action="{{ url_for('login') }}" method="post">
-                    <input type="text" name="username" placeholder="Username" required>
-                    <input type="password" name="password" placeholder="Password" required>
-                    <input type="submit" value="Login">
                 </form>
             </div>
         {% endif %}
@@ -94,6 +88,3 @@
     </div>
 </body>
 </html>
-
-
-
